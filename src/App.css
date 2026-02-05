@@ -172,12 +172,15 @@
 /* ===== MAP SECTION ===== */
 .map-section {
   height: calc(100vh - 64px);
+  min-height: 600px;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 .map-wrapper {
   flex: 1;
   position: relative;
+  min-height: 600px;
 }
 .map-container {
   width: 100%;
