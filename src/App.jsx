@@ -2,12 +2,14 @@ import { useState } from 'react'
 import './App.css'
 import MapView from './components/MapView'
 import NameStats from './components/NameStats'
+import Methodology from './components/Methodology'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 
 const SECTIONS = {
   MAP: 'map',
   NAMES: 'names',
+  METHODOLOGY: 'methodology',
 }
 
 function App() {
@@ -19,8 +21,11 @@ function App() {
       <main>
         {activeSection === SECTIONS.MAP && <MapView />}
         {activeSection === SECTIONS.NAMES && <NameStats />}
+        {activeSection === SECTIONS.METHODOLOGY && (
+          <Methodology onBack={() => setActiveSection(SECTIONS.MAP)} />
+        )}
       </main>
-      <Footer />
+      <Footer onMethodologyClick={() => setActiveSection(SECTIONS.METHODOLOGY)} />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-export default function Footer() {
+export default function Footer({ onMethodologyClick }) {
   return (
     <footer className="footer">
       <div className="footer-inner">
@@ -11,9 +11,15 @@ export default function Footer() {
           A community resource locator. All data sourced from OpenStreetMap
           and publicly available directories.
         </p>
-        <p className="footer-disclaimer">
-          This tool is for informational purposes only. Data may be incomplete or outdated.
-        </p>
+        <div className="footer-disclaimer">
+          <p>
+            This site displays derived statistical data for educational and research purposes only.
+            We do not store or display personal information, last names, addresses, or precise coordinates.
+          </p>
+          <button className="methodology-link" onClick={onMethodologyClick}>
+            See our full methodology for more info
+          </button>
+        </div>
       </div>
     </footer>
   )
