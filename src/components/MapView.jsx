@@ -35,6 +35,7 @@ export default function MapView() {
   const [searchQuery, setSearchQuery] = useState('')
   const [noToken, setNoToken] = useState(false)
   const [showHeatmap, setShowHeatmap] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // Count places per category
   const categoryCounts = useMemo(() => {
@@ -300,6 +301,14 @@ export default function MapView() {
     setActiveFilters(prev => ({ ...prev, [key]: !prev[key] }))
   }
 
+  const handleLRToggle = () => {
+    setShowHeatmap(prev => !prev)
+    // Close sidebar on mobile after toggling
+    if (window.innerWidth <= 768) {
+      setSidebarOpen(false)
+    }
+  }
+
   if (noToken) {
     return (
       <section className="map-section">
@@ -316,6 +325,23 @@ export default function MapView() {
       <div className="map-wrapper">
         <div ref={mapContainer} className="map-container" />
 
+        {/* Mobile sidebar toggle */}
+        <button
+          className={`mobile-sidebar-toggle ${sidebarOpen ? 'active' : ''}`}
+          onClick={() => setSidebarOpen(prev => !prev)}
+          aria-label="Toggle filters"
+        >
+          {sidebarOpen ? '✕' : '☰'}
+        </button>
+
+        {/* Mobile overlay */}
+        {sidebarOpen && (
+          <div
+            className="mobile-sidebar-overlay visible"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
         {/* Search bar */}
         <div className="map-search-overlay">
           <form className="map-search" onSubmit={handleSearch}>
@@ -330,10 +356,10 @@ export default function MapView() {
         </div>
 
         {/* Sidebar */}
-        <div className="map-sidebar">
+        <div className={`map-sidebar ${sidebarOpen ? 'open' : ''}`}>
           <button
             className={`lr-index-toggle ${showHeatmap ? 'active' : ''}`}
-            onClick={() => setShowHeatmap(prev => !prev)}
+            onClick={handleLRToggle}
           >
             <span className="lr-index-label">LR Index</span>
             <span className={`lr-index-indicator ${showHeatmap ? 'on' : ''}`}>
