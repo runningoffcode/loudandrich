@@ -14,6 +14,8 @@ const CATEGORIES = {
   jewish_jewelry: { label: 'Jewelry & Judaica', dotColor: '#14B8A6', icon: '💎' }, // Teal
   high_end_store: { label: 'High-End Stores', dotColor: '#E11D48', icon: '👜' },  // Red
   bagel_shop: { label: 'Bagel Shops', dotColor: '#A855F7', icon: '🥯' },        // Violet
+  jewish_bakery: { label: 'Jewish Bakeries', dotColor: '#F472B6', icon: '🥐' },  // Light Pink
+  jewish_cemetery: { label: 'Jewish Cemeteries', dotColor: '#6B7280', icon: '🪦' }, // Gray
 }
 
 const HEX_SOURCE_ID = 'lr-hex'
@@ -105,7 +107,7 @@ export default function MapView() {
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
       center: [-95.7, 39.8],
-      zoom: 4,
+      zoom: 5,
     })
 
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right')
@@ -170,6 +172,8 @@ export default function MapView() {
             'jewish_jewelry', '#14B8A6',
             'high_end_store', '#E11D48',
             'bagel_shop', '#A855F7',
+            'jewish_bakery', '#F472B6',
+            'jewish_cemetery', '#6B7280',
             '#888888'
           ],
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 2, 8, 4, 12, 6],

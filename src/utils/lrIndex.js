@@ -9,6 +9,8 @@ export const CATEGORY_WEIGHTS = {
   jewish_jewelry: 2,
   high_end_store: 1,
   bagel_shop: 2,
+  jewish_bakery: 2,
+  jewish_cemetery: 1,
 }
 
 export const LR_LABELS = [
@@ -20,7 +22,10 @@ export const LR_LABELS = [
 ]
 
 // Fixed H3 resolution for consistent hex sizes across all zoom levels
+// Resolution 5 = ~250 km² average hex area (largest)
+// Resolution 6 = ~36 km² average hex area
 // Resolution 7 = ~5 km² average hex area
+// Resolution 8 = ~0.7 km² average hex area
 export const H3_RESOLUTION = 7
 
 export function computeHexScores(places) {
