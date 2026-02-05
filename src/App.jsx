@@ -7,6 +7,7 @@ import Methodology from './components/Methodology'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import RequestModal from './components/RequestModal'
+import DisclaimerModal from './components/DisclaimerModal'
 
 const SECTIONS = {
   MAP: 'map',
@@ -39,6 +40,7 @@ function App() {
         isOpen={isRequestModalOpen}
         onClose={() => setIsRequestModalOpen(false)}
       />
+      <DisclaimerModal />
     </div>
   )
 }

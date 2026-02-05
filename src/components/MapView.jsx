@@ -9,13 +9,13 @@ const CATEGORIES = {
   synagogue: { label: 'Synagogues', dotColor: '#3B82F6', icon: '✡️' },        // Blue
   kosher_restaurant: { label: 'Kosher Restaurants', dotColor: '#F59E0B', icon: '🍽️' }, // Amber
   kosher_grocery: { label: 'Kosher Grocery', dotColor: '#22C55E', icon: '🛒' },  // Green
-  jewish_school: { label: 'Jewish Schools', dotColor: '#EC4899', icon: '🏫' },   // Pink
+  jewish_school: { label: 'Schools', dotColor: '#EC4899', icon: '🏫' },   // Pink
   community_center: { label: 'Community Centers', dotColor: '#8B5CF6', icon: '🏛️' }, // Purple
   jewish_jewelry: { label: 'Jewelry & Judaica', dotColor: '#14B8A6', icon: '💎' }, // Teal
   high_end_store: { label: 'High-End Stores', dotColor: '#E11D48', icon: '👜' },  // Red
   bagel_shop: { label: 'Bagel Shops', dotColor: '#A855F7', icon: '🥯' },        // Violet
-  jewish_bakery: { label: 'Jewish Bakeries', dotColor: '#F472B6', icon: '🥐' },  // Light Pink
-  jewish_cemetery: { label: 'Jewish Cemeteries', dotColor: '#6B7280', icon: '🪦' }, // Gray
+  jewish_bakery: { label: 'Kosher Bakeries', dotColor: '#F472B6', icon: '🥐' },  // Light Pink
+  jewish_cemetery: { label: 'Cemeteries', dotColor: '#6B7280', icon: '🪦' }, // Gray
 }
 
 const HEX_SOURCE_ID = 'lr-hex'
