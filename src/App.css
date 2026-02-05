@@ -292,25 +292,63 @@
 .sidebar-label {
   flex: 1;
 }
+.sidebar-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  font-variant-numeric: tabular-nums;
+}
+.sidebar-filter-item.active .sidebar-count {
+  color: rgba(255,255,255,0.7);
+}
 .sidebar-divider {
   height: 1px;
   background: rgba(255,255,255,0.08);
   margin: 0.4rem 0;
 }
-.sidebar-toggle-indicator {
-  font-size: 0.6rem;
+
+/* LR Index toggle at top of sidebar */
+.lr-index-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.6);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.lr-index-toggle:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.15);
+}
+.lr-index-toggle.active {
+  background: rgba(26, 79, 208, 0.15);
+  border-color: rgba(26, 79, 208, 0.4);
+  color: #fff;
+}
+.lr-index-label {
   font-weight: 700;
-  padding: 0.15rem 0.4rem;
+}
+.lr-index-indicator {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
   border-radius: 4px;
   background: rgba(255,255,255,0.1);
   color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.sidebar-toggle-indicator.on {
-  background: rgba(26, 79, 208, 0.3);
-  color: #1A4FD0;
-}
-.lr-toggle.active .sidebar-dot {
-  box-shadow: 0 0 8px #1A4FD0;
+.lr-index-indicator.on {
+  background: rgba(26, 79, 208, 0.4);
+  color: #5B9AFF;
 }
 
 /* Loading overlay */
