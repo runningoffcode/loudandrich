@@ -5,6 +5,7 @@ import NameStats from './components/NameStats'
 import Methodology from './components/Methodology'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import RequestModal from './components/RequestModal'
 
 const SECTIONS = {
   MAP: 'map',
@@ -14,10 +15,15 @@ const SECTIONS = {
 
 function App() {
   const [activeSection, setActiveSection] = useState(SECTIONS.MAP)
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false)
 
   return (
     <div className="app">
-      <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
+      <Navbar
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+        onRequestClick={() => setIsRequestModalOpen(true)}
+      />
       <main>
         {activeSection === SECTIONS.MAP && <MapView />}
         {activeSection === SECTIONS.NAMES && <NameStats />}
@@ -26,6 +32,10 @@ function App() {
         )}
       </main>
       <Footer onMethodologyClick={() => setActiveSection(SECTIONS.METHODOLOGY)} />
+      <RequestModal
+        isOpen={isRequestModalOpen}
+        onClose={() => setIsRequestModalOpen(false)}
+      />
     </div>
   )
 }

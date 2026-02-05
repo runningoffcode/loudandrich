@@ -1127,6 +1127,15 @@ export default function NameStats() {
         </div>
       </div>
 
+      <div className="names-about">
+        <h3>About Our Data</h3>
+        <p>
+          Loud and Rich analyses publicly available voter registration data to map the geographic
+          distribution of names. All data is aggregated and anonymized and individual voter
+          information is never shown.
+        </p>
+      </div>
+
       <div className="names-source">
         Data sourced from U.S. Census Bureau and Social Security Administration public records.
       </div>

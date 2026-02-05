@@ -1,4 +1,4 @@
-export default function Navbar({ activeSection, setActiveSection }) {
+export default function Navbar({ activeSection, setActiveSection, onRequestClick }) {
   return (
     <nav className="navbar">
       <div className="navbar-inner">
@@ -11,6 +11,12 @@ export default function Navbar({ activeSection, setActiveSection }) {
             onClick={() => setActiveSection('names')}
           >
             Name Stats
+          </button>
+          <button
+            className="nav-link request-btn"
+            onClick={onRequestClick}
+          >
+            Request
           </button>
         </div>
       </div>
