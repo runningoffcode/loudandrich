@@ -35,7 +35,7 @@ export default function MapView() {
   const [selectedPlace, setSelectedPlace] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [noToken, setNoToken] = useState(false)
-  const [showHeatmap, setShowHeatmap] = useState(false)
+  const [showHeatmap, setShowHeatmap] = useState(true)
   const [filtersDropdownOpen, setFiltersDropdownOpen] = useState(false)
 
   // Count places per category
@@ -150,10 +150,14 @@ export default function MapView() {
       })
 
       // Add a circle layer for ALL markers (single layer, colored by category)
+      // Start with visibility 'none' since heatmap is on by default
       map.current.addLayer({
         id: 'places-circles',
         type: 'circle',
         source: MARKERS_SOURCE_ID,
+        layout: {
+          'visibility': 'none',
+        },
         paint: {
           'circle-color': [
             'match', ['get', 'category'],
@@ -277,18 +281,28 @@ export default function MapView() {
 
   // Update hex heatmap
   useEffect(() => {
-    if (!map.current || !mapReady.current) return
+    if (!map.current) return
 
-    const source = map.current.getSource(HEX_SOURCE_ID)
-    if (!source) return
+    const updateHeatmap = () => {
+      const source = map.current?.getSource(HEX_SOURCE_ID)
+      if (!source) {
+        // Map not ready yet, try again
+        if (filteredPlaces.length > 0 && showHeatmap) {
+          setTimeout(updateHeatmap, 100)
+        }
+        return
+      }
 
-    if (!showHeatmap || filteredPlaces.length === 0) {
-      source.setData({ type: 'FeatureCollection', features: [] })
-      return
+      if (!showHeatmap || filteredPlaces.length === 0) {
+        source.setData({ type: 'FeatureCollection', features: [] })
+        return
+      }
+
+      const geojson = computeHexScores(filteredPlaces)
+      source.setData(geojson)
     }
 
-    const geojson = computeHexScores(filteredPlaces)
-    source.setData(geojson)
+    updateHeatmap()
   }, [filteredPlaces, showHeatmap])
 
   // Toggle dots visibility based on heatmap state
