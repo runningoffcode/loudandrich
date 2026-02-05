@@ -28,6 +28,7 @@ export default function MapView() {
   const map = useRef(null)
   const mapReady = useRef(false)
   const filtersDropdownRef = useRef(null)
+  const placePopupRef = useRef(null)
 
   const [loading, setLoading] = useState(true)
   const [loadingProgress, setLoadingProgress] = useState('')
@@ -35,7 +36,6 @@ export default function MapView() {
   const [activeFilters, setActiveFilters] = useState(
     Object.keys(CATEGORIES).reduce((acc, key) => ({ ...acc, [key]: true }), {})
   )
-  const [selectedPlace, setSelectedPlace] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [noToken, setNoToken] = useState(false)
   const [showHeatmap, setShowHeatmap] = useState(true)
@@ -106,8 +106,8 @@ export default function MapView() {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
-      center: [-95.7, 39.8],
-      zoom: 5,
+      center: [-118.25, 34.05],
+      zoom: 8,
     })
 
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right')
@@ -182,18 +182,38 @@ export default function MapView() {
         },
       })
 
+      // Place popup for markers
+      placePopupRef.current = new mapboxgl.Popup({
+        closeButton: true,
+        closeOnClick: true,
+        className: 'place-popup',
+        maxWidth: '300px',
+      })
+
       // Click handler for markers
       map.current.on('click', 'places-circles', (e) => {
         if (!e.features || e.features.length === 0) return
-        const props = e.features[0].properties
-        setSelectedPlace({
-          id: props.id,
-          name: props.name,
-          category: props.category,
-          address: props.address,
-          phone: props.phone,
-          website: props.website,
-        })
+        const feature = e.features[0]
+        const props = feature.properties
+        const coordinates = feature.geometry.coordinates.slice()
+        const cat = CATEGORIES[props.category] || {}
+
+        const html = `
+          <div class="place-popup-content">
+            <div class="place-category-badge" style="background: ${cat.dotColor}">
+              ${cat.icon || ''} ${cat.label || props.category}
+            </div>
+            <h3>${props.name}</h3>
+            ${props.address ? `<p class="place-address">${props.address}</p>` : ''}
+            ${props.phone ? `<p class="place-phone"><a href="tel:${props.phone}">${props.phone}</a></p>` : ''}
+            ${props.website ? `<p class="place-website"><a href="${props.website}" target="_blank" rel="noopener">Visit Website</a></p>` : ''}
+          </div>
+        `
+
+        placePopupRef.current
+          .setLngLat(coordinates)
+          .setHTML(html)
+          .addTo(map.current)
       })
 
       map.current.on('mouseenter', 'places-circles', () => {
@@ -478,26 +498,6 @@ export default function MapView() {
           </div>
         )}
 
-        {selectedPlace && (
-          <div className="place-detail">
-            <button className="place-close" onClick={() => setSelectedPlace(null)}>&times;</button>
-            <div className="place-category-badge" style={{ background: CATEGORIES[selectedPlace.category]?.dotColor }}>
-              {CATEGORIES[selectedPlace.category]?.icon} {CATEGORIES[selectedPlace.category]?.label}
-            </div>
-            <h3>{selectedPlace.name}</h3>
-            {selectedPlace.address && <p className="place-address">{selectedPlace.address}</p>}
-            {selectedPlace.phone && (
-              <p className="place-phone">
-                <a href={`tel:${selectedPlace.phone}`}>{selectedPlace.phone}</a>
-              </p>
-            )}
-            {selectedPlace.website && (
-              <p className="place-website">
-                <a href={selectedPlace.website} target="_blank" rel="noopener">Visit Website</a>
-              </p>
-            )}
-          </div>
-        )}
 
         {showHeatmap && <LRLegend />}
       </div>

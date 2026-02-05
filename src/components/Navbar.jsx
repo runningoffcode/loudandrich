@@ -13,6 +13,12 @@ export default function Navbar({ activeSection, setActiveSection, onRequestClick
             Name Stats
           </button>
           <button
+            className={`nav-link ${activeSection === 'holidays' ? 'active' : ''}`}
+            onClick={() => setActiveSection('holidays')}
+          >
+            Holidays
+          </button>
+          <button
             className="nav-link request-btn"
             onClick={onRequestClick}
           >
