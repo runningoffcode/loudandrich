@@ -14,11 +14,11 @@ export const CATEGORY_WEIGHTS = {
 }
 
 export const LR_LABELS = [
-  { min: 0, max: 20, label: 'Shvach', color: '#F97316' },        // Weak/Sparse
-  { min: 21, max: 40, label: 'Parnassah', color: '#FBBF24' },    // Making a living
-  { min: 41, max: 60, label: 'Macher', color: '#22C55E' },       // Big shot
-  { min: 61, max: 80, label: 'Balabos', color: '#06B6D4' },      // Boss/Established
-  { min: 81, max: 100, label: 'Gvir', color: '#1A4FD0' },        // Rich man
+  { min: 0, max: 20, label: 'Schnorrer', color: '#F97316' },     // Broke/freeloader
+  { min: 21, max: 40, label: 'Schlemiel', color: '#FBBF24' },    // Unlucky, struggling
+  { min: 41, max: 60, label: 'Schmaltzy', color: '#22C55E' },    // Getting by, middling
+  { min: 61, max: 80, label: 'Mensch', color: '#06B6D4' },       // Respectable, solid
+  { min: 81, max: 100, label: 'Mogul', color: '#1A4FD0' },       // Rich, powerful
 ]
 
 // Fixed H3 resolution for consistent hex sizes across all zoom levels
