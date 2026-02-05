@@ -25,7 +25,9 @@ function App() {
           <Methodology onBack={() => setActiveSection(SECTIONS.MAP)} />
         )}
       </main>
-      <Footer onMethodologyClick={() => setActiveSection(SECTIONS.METHODOLOGY)} />
+      {activeSection !== SECTIONS.MAP && (
+        <Footer onMethodologyClick={() => setActiveSection(SECTIONS.METHODOLOGY)} />
+      )}
     </div>
   )
 }

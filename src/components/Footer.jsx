@@ -3,9 +3,7 @@ export default function Footer({ onMethodologyClick }) {
     <footer className="footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <span className="logo-loud">LOUD</span>
-          <span className="logo-amp">&</span>
-          <span className="logo-rich">RICH</span>
+          <img src="/logo.png" alt="Loud & Rich" className="footer-logo-img" />
         </div>
         <p className="footer-text">
           A community resource locator. All data sourced from OpenStreetMap

@@ -24,6 +24,7 @@ export default function MapView() {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const mapReady = useRef(false)
+  const filtersDropdownRef = useRef(null)
 
   const [loading, setLoading] = useState(true)
   const [loadingProgress, setLoadingProgress] = useState('')
@@ -35,7 +36,7 @@ export default function MapView() {
   const [searchQuery, setSearchQuery] = useState('')
   const [noToken, setNoToken] = useState(false)
   const [showHeatmap, setShowHeatmap] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [filtersDropdownOpen, setFiltersDropdownOpen] = useState(false)
 
   // Count places per category
   const categoryCounts = useMemo(() => {
@@ -193,30 +194,54 @@ export default function MapView() {
         map.current.getCanvas().style.cursor = ''
       })
 
-      // Hex hover popup
-      const hexPopup = new mapboxgl.Popup({
+      // Hex hover popup (desktop)
+      const hexHoverPopup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: false,
         className: 'hex-popup',
       })
 
+      // Hex click popup (mobile - with close button)
+      const hexClickPopup = new mapboxgl.Popup({
+        closeButton: true,
+        closeOnClick: true,
+        className: 'hex-popup hex-popup-mobile',
+      })
+
+      const getHexPopupHTML = (props) => {
+        const score = props.score
+        const label = props.label
+        const labelInfo = LR_LABELS.find(lr => score >= lr.min && score <= lr.max) || LR_LABELS[0]
+        return `<div class="hex-popup-inner"><div class="hex-popup-score">${score}<span>/100</span></div><div class="hex-popup-label" style="color:${labelInfo.color}">${label}</div></div>`
+      }
+
+      // Desktop: hover behavior
       map.current.on('mousemove', HEX_FILL_LAYER, (e) => {
         if (!e.features || e.features.length === 0) return
         map.current.getCanvas().style.cursor = 'pointer'
         const props = e.features[0].properties
-        const score = props.score
-        const label = props.label
-        const labelInfo = LR_LABELS.find(lr => score >= lr.min && score <= lr.max) || LR_LABELS[0]
-
-        hexPopup
+        hexHoverPopup
           .setLngLat(e.lngLat)
-          .setHTML(`<div class="hex-popup-inner"><div class="hex-popup-score">${score}<span>/100</span></div><div class="hex-popup-label" style="color:${labelInfo.color}">${label}</div></div>`)
+          .setHTML(getHexPopupHTML(props))
           .addTo(map.current)
       })
 
       map.current.on('mouseleave', HEX_FILL_LAYER, () => {
         map.current.getCanvas().style.cursor = ''
-        hexPopup.remove()
+        hexHoverPopup.remove()
+      })
+
+      // Mobile: click/tap behavior
+      map.current.on('click', HEX_FILL_LAYER, (e) => {
+        if (!e.features || e.features.length === 0) return
+        const props = e.features[0].properties
+        // Remove hover popup if visible
+        hexHoverPopup.remove()
+        // Show click popup at tap location
+        hexClickPopup
+          .setLngLat(e.lngLat)
+          .setHTML(getHexPopupHTML(props))
+          .addTo(map.current)
       })
 
       mapReady.current = true
@@ -280,6 +305,17 @@ export default function MapView() {
     }
   }, [showHeatmap])
 
+  // Close filters dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (filtersDropdownOpen && filtersDropdownRef.current && !filtersDropdownRef.current.contains(e.target)) {
+        setFiltersDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [filtersDropdownOpen])
+
   const handleSearch = async (e) => {
     e.preventDefault()
     if (!searchQuery.trim() || !map.current) return
@@ -301,13 +337,8 @@ export default function MapView() {
     setActiveFilters(prev => ({ ...prev, [key]: !prev[key] }))
   }
 
-  const handleLRToggle = () => {
-    setShowHeatmap(prev => !prev)
-    // Close sidebar on mobile after toggling
-    if (window.innerWidth <= 768) {
-      setSidebarOpen(false)
-    }
-  }
+  // Count active filters for mobile badge
+  const activeFilterCount = Object.values(activeFilters).filter(Boolean).length
 
   if (noToken) {
     return (
@@ -325,25 +356,58 @@ export default function MapView() {
       <div className="map-wrapper">
         <div ref={mapContainer} className="map-container" />
 
-        {/* Mobile sidebar toggle */}
-        <button
-          className={`mobile-sidebar-toggle ${sidebarOpen ? 'active' : ''}`}
-          onClick={() => setSidebarOpen(prev => !prev)}
-          aria-label="Toggle filters"
-        >
-          {sidebarOpen ? '✕' : '☰'}
-        </button>
+        {/* Mobile controls - LR Index + Filters dropdown + Search */}
+        <div className="mobile-controls">
+          <div className="mobile-controls-row">
+            <button
+              className={`mobile-lr-toggle ${showHeatmap ? 'active' : ''}`}
+              onClick={() => setShowHeatmap(prev => !prev)}
+            >
+              <span>LR Index</span>
+              <span className={`mobile-lr-indicator ${showHeatmap ? 'on' : ''}`}>
+                {showHeatmap ? 'ON' : 'OFF'}
+              </span>
+            </button>
+            <div className="mobile-filters-wrapper" ref={filtersDropdownRef}>
+              <button
+                className={`mobile-filters-toggle ${filtersDropdownOpen ? 'active' : ''}`}
+                onClick={() => setFiltersDropdownOpen(prev => !prev)}
+              >
+                <span>Filters</span>
+                <span className="mobile-filters-badge">{activeFilterCount}</span>
+              </button>
+              {/* Mobile filters dropdown - overlays on top */}
+              {filtersDropdownOpen && (
+                <div className="mobile-filters-dropdown">
+                  {Object.entries(CATEGORIES).map(([key, cat]) => (
+                    <button
+                      key={key}
+                      className={`mobile-filter-item ${activeFilters[key] ? 'active' : ''}`}
+                      onClick={() => toggleFilter(key)}
+                    >
+                      <span className="mobile-filter-dot" style={{ background: activeFilters[key] ? cat.dotColor : 'rgba(255,255,255,0.2)' }} />
+                      <span className="mobile-filter-label">{cat.label}</span>
+                      <span className="mobile-filter-count">{categoryCounts[key]?.toLocaleString() || 0}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
 
-        {/* Mobile overlay */}
-        {sidebarOpen && (
-          <div
-            className="mobile-sidebar-overlay visible"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
+          <form className="mobile-search" onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="Search city or zip..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+            <button type="submit">Go</button>
+          </form>
+        </div>
 
-        {/* Search bar */}
-        <div className="map-search-overlay">
+        {/* Desktop search bar */}
+        <div className="map-search-overlay desktop-only">
           <form className="map-search" onSubmit={handleSearch}>
             <input
               type="text"
@@ -355,11 +419,11 @@ export default function MapView() {
           </form>
         </div>
 
-        {/* Sidebar */}
-        <div className={`map-sidebar ${sidebarOpen ? 'open' : ''}`}>
+        {/* Desktop Sidebar */}
+        <div className="map-sidebar desktop-only">
           <button
             className={`lr-index-toggle ${showHeatmap ? 'active' : ''}`}
-            onClick={handleLRToggle}
+            onClick={() => setShowHeatmap(prev => !prev)}
           >
             <span className="lr-index-label">LR Index</span>
             <span className={`lr-index-indicator ${showHeatmap ? 'on' : ''}`}>

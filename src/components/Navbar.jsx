@@ -3,9 +3,7 @@ export default function Navbar({ activeSection, setActiveSection }) {
     <nav className="navbar">
       <div className="navbar-inner">
         <button className="nav-logo" onClick={() => setActiveSection('map')}>
-          <span className="logo-loud">LOUD</span>
-          <span className="logo-amp">&</span>
-          <span className="logo-rich">RICH</span>
+          <img src="/logo.png" alt="Loud & Rich" className="nav-logo-img" />
         </button>
         <div className="nav-links">
           <button
