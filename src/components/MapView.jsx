@@ -6,13 +6,14 @@ import LRLegend from './LRLegend'
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || ''
 
 const CATEGORIES = {
-  synagogue: { label: 'Synagogues', dotColor: '#3B82F6', icon: '✡️' },
-  kosher_restaurant: { label: 'Kosher Restaurants', dotColor: '#F59E0B', icon: '🍽️' },
-  kosher_grocery: { label: 'Kosher Grocery', dotColor: '#22C55E', icon: '🛒' },
-  jewish_school: { label: 'Jewish Schools', dotColor: '#EC4899', icon: '🏫' },
-  community_center: { label: 'Community Centers', dotColor: '#A855F7', icon: '🏛️' },
-  jewish_jewelry: { label: 'Jewelry & Judaica', dotColor: '#F97316', icon: '💎' },
-  high_end_store: { label: 'High-End Stores', dotColor: '#E11D48', icon: '👜' },
+  synagogue: { label: 'Synagogues', dotColor: '#3B82F6', icon: '✡️' },        // Blue
+  kosher_restaurant: { label: 'Kosher Restaurants', dotColor: '#F59E0B', icon: '🍽️' }, // Amber
+  kosher_grocery: { label: 'Kosher Grocery', dotColor: '#22C55E', icon: '🛒' },  // Green
+  jewish_school: { label: 'Jewish Schools', dotColor: '#EC4899', icon: '🏫' },   // Pink
+  community_center: { label: 'Community Centers', dotColor: '#8B5CF6', icon: '🏛️' }, // Purple
+  jewish_jewelry: { label: 'Jewelry & Judaica', dotColor: '#14B8A6', icon: '💎' }, // Teal
+  high_end_store: { label: 'High-End Stores', dotColor: '#E11D48', icon: '👜' },  // Red
+  bagel_shop: { label: 'Bagel Shops', dotColor: '#A855F7', icon: '🥯' },        // Violet
 }
 
 const HEX_SOURCE_ID = 'lr-hex'
@@ -165,14 +166,15 @@ export default function MapView() {
             'kosher_restaurant', '#F59E0B',
             'kosher_grocery', '#22C55E',
             'jewish_school', '#EC4899',
-            'community_center', '#A855F7',
-            'jewish_jewelry', '#F97316',
+            'community_center', '#8B5CF6',
+            'jewish_jewelry', '#14B8A6',
             'high_end_store', '#E11D48',
+            'bagel_shop', '#A855F7',
             '#888888'
           ],
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 4, 8, 7, 12, 10],
-          'circle-stroke-width': 2,
-          'circle-stroke-color': '#ffffff',
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 3, 2, 8, 4, 12, 6],
+          'circle-stroke-width': 0,
+          'circle-stroke-color': 'transparent',
         },
       })
 

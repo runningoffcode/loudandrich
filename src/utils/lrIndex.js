@@ -8,6 +8,7 @@ export const CATEGORY_WEIGHTS = {
   kosher_grocery: 3,
   jewish_jewelry: 2,
   high_end_store: 1,
+  bagel_shop: 2,
 }
 
 export const LR_LABELS = [
