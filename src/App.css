@@ -659,6 +659,40 @@
   font-weight: 600;
 }
 
+/* Hex popup categories list */
+.hex-popup-categories {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: left;
+}
+.hex-popup-category-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+}
+.hex-cat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.hex-cat-label {
+  color: rgba(255,255,255,0.85);
+  flex: 1;
+  white-space: nowrap;
+}
+.hex-cat-count {
+  color: #fff;
+  font-weight: 600;
+  min-width: 1.5rem;
+  text-align: right;
+}
+
 /* ===== LR INDEX LEGEND ===== */
 .lr-legend {
   position: absolute;

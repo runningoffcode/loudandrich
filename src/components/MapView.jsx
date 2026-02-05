@@ -242,7 +242,25 @@ export default function MapView() {
         const score = props.score
         const label = props.label
         const labelInfo = LR_LABELS.find(lr => score >= lr.min && score <= lr.max) || LR_LABELS[0]
-        return `<div class="hex-popup-inner"><div class="hex-popup-score">${score}<span>/100</span></div><div class="hex-popup-label" style="color:${labelInfo.color}">${label}</div></div>`
+
+        // Parse categories and build list
+        let categoriesHTML = ''
+        try {
+          const categories = JSON.parse(props.categories || '{}')
+          const entries = Object.entries(categories).filter(([_, count]) => count > 0)
+          if (entries.length > 0) {
+            categoriesHTML = '<div class="hex-popup-categories">'
+            for (const [catKey, count] of entries) {
+              const cat = CATEGORIES[catKey] || { label: catKey, icon: '', dotColor: '#888' }
+              categoriesHTML += `<div class="hex-popup-category-item"><span class="hex-cat-dot" style="background:${cat.dotColor}"></span><span class="hex-cat-label">${cat.label}</span><span class="hex-cat-count">${count}</span></div>`
+            }
+            categoriesHTML += '</div>'
+          }
+        } catch (e) {
+          console.error('Failed to parse categories:', e)
+        }
+
+        return `<div class="hex-popup-inner"><div class="hex-popup-score">${score}<span>/100</span></div><div class="hex-popup-label" style="color:${labelInfo.color}">${label}</div>${categoriesHTML}</div>`
       }
 
       // Desktop: hover behavior
